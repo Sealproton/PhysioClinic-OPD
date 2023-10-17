@@ -9,12 +9,12 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       envFilePath: '.env.development',
     }),
-    UserModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1000s' },
     }),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
