@@ -20,10 +20,10 @@ export class UserRepository {
       throw new Error('Failed to create a user.');
     }
   }
-  async findUser(username: string) {
+  async findUserWithUsername(username: string) {
     try {
       const response = await this.pool.query(
-        'SELECT * FROM users where username = $1',
+        'SELECT * FROM users WHERE username = $1',
         [username],
       );
       return response.rows[0];
