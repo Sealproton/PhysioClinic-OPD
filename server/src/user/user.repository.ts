@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as pg from 'pg';
-import * as dotenv from 'dotenv';
-dotenv.config();
 @Injectable()
 export class UserRepository {
   private pool;
