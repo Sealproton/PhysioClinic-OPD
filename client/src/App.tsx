@@ -1,11 +1,17 @@
-import { useState } from 'react';
 import AuthenticationApp from './pages/AuthenticationApp';
-import UnauthenticationApp from './pages/UnauthenticationApp';
+import { ChakraProvider } from '@chakra-ui/react';
 import './App.css';
-
+import LoginPage from './pages/LoginPage';
+import { useAuth } from './ContextAPI/authContext';
 function App() {
-  const [token, setToken] = useState<boolean>(false);
-  return <div>{token ? <AuthenticationApp /> : <UnauthenticationApp />}</div>;
+  const { isAuthenticated } = useAuth();
+  return (
+    <ChakraProvider>
+      <div className='flex w-screen min-h-screen bg-gray-100 font-[Roboto]'>
+        {isAuthenticated ? <AuthenticationApp /> : <LoginPage />}
+      </div>
+    </ChakraProvider>
+  );
 }
 
 export default App;
