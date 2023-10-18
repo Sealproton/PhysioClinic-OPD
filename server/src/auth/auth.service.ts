@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { UnauthorizedException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -11,6 +14,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async signup({ username, password }: CreateUserDto) {
+    if (!username) {
+      throw new BadRequestException('incorrect username');
+    }
+    if (!password) {
+      throw new BadRequestException('incorrect password');
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const signupResult = await this.userService.createUser(

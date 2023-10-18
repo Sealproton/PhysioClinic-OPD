@@ -10,6 +10,7 @@ type AuthProviderProp = {
 };
 export interface AuthContextValues {
   signIn: (username: string, password: string) => Promise<number>;
+  signUp: (username: string, password: string) => Promise<any>;
   signOut: () => void;
   isAuthenticated: boolean;
 }
@@ -47,12 +48,27 @@ const AuthProvider: React.FC<AuthProviderProp> = ({ children }) => {
       return error.response.status;
     }
   };
+  const signUp = async (username: string, password: string): Promise<any> => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/signup`,
+        {
+          username,
+          password,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return error.response.data;
+    }
+  };
   const signOut = () => {
     localStorage.removeItem('token');
   };
   const isAuthenticated = Boolean(localStorage.getItem('token'));
   return (
-    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated }}>
+    <AuthContext.Provider value={{ signIn, signUp, signOut, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

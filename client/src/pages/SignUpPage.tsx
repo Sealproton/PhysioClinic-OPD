@@ -6,8 +6,9 @@ import { useToast } from '@chakra-ui/react';
 import { AuthContextValues } from '../ContextAPI/authContext';
 import { FcUnlock, FcManager } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
-const LoginPage: React.FC = () => {
-  const { signIn } = useAuth() as AuthContextValues;
+
+const SignUpPage: React.FC = () => {
+  const { signUp, signIn } = useAuth() as AuthContextValues;
   const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
@@ -15,35 +16,42 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const result = await signIn(username, password);
-      if (result === 400 || result === 404 || result === 401) {
+      const result = await signUp(username, password);
+      console.log(result);
+      if (result.message === 'user exist') {
         toast({
-          title: 'Incorrect username or password.',
+          title: 'Please try other username',
           status: 'error',
           duration: 2000,
           isClosable: true,
         });
-      } else if (result === 500) {
+      } else if (result.message === 'incorrect password') {
         toast({
-          title: 'Something wrong.',
-          description: 'Please try again later',
+          title: 'Please input your password',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        });
+      } else if (result.message === 'incorrect username') {
+        toast({
+          title: 'Please input your username',
           status: 'error',
           duration: 2000,
           isClosable: true,
         });
       } else {
         toast({
-          title: 'Logging in success',
+          title: 'Sign up seccess in success',
           description: `Welcome ❤️️`,
           status: 'success',
           duration: 2000,
           isClosable: true,
         });
+        await signIn(username, password);
       }
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
       toast({
         title: 'Something wrong',
         description: 'Please try again later',
@@ -51,6 +59,7 @@ const LoginPage: React.FC = () => {
         duration: 2000,
         isClosable: true,
       });
+      setIsLoading(false);
     }
   };
   return (
@@ -62,17 +71,8 @@ const LoginPage: React.FC = () => {
           className='rounded-full h-[120px] w-[120px] shadow-xl '
         />
         <h1 className='flex justify-start  w-full font-bold text-[2rem] text-gray-700 mt-5'>
-          Sign in
+          Sign Up
         </h1>
-        <div className='w-full flex '>
-          <p className='text-gray-500 text-[0.8rem]'>New user?</p>
-          <Link
-            to='/signup'
-            className='ml-1 font-semibold text-blue-500 text-[0.8rem] hover:underline cursor-pointer'
-          >
-            Create Acoount
-          </Link>
-        </div>
         <form className='flex gap-1 flex-col w-full mt-3'>
           <label htmlFor='username' className='flex items-center'>
             Username <FcManager />
@@ -95,7 +95,10 @@ const LoginPage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></input>
         </form>
-        <div className='w-full flex justify-end mt-5'>
+        <div className='w-full flex justify-between items-center mt-5'>
+          <Link to='/' className='text-gray-500 text-[0.8rem]'>
+            Already have account?
+          </Link>
           {isLoading ? (
             <Button isLoading loadingText='Loading' colorScheme='blue' w='40%'>
               Submit
@@ -108,7 +111,7 @@ const LoginPage: React.FC = () => {
               fontSize='xl'
               onClick={handleSubmit}
             >
-              Log in
+              Submit
             </Button>
           )}
         </div>
@@ -117,4 +120,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
