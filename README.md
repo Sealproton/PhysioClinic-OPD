@@ -1,4 +1,4 @@
-# PhysioClinic-OPD (On process and will be deploied in  2 weeks)
+# PhysioClinic-OPD (On process and extimated to be deploied in 30 October 1023)
 This is my first individual project for physiotherapist clinic OPD management 
 
 ## Stacks
