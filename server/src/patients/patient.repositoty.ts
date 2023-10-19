@@ -10,13 +10,22 @@ export class PatientRepository {
       connectionString: `postgresql://postgres:${process.env.DB_PASSWORD}@db.dqidiaesllnjownlicwx.supabase.co:5432/postgres`,
     });
   }
-  async findPatient(userID: number, name: string, lname: string) {
+  async findPatient(userID: number, ptFindPatameter: any) {
+    const { name, lname, pt_id } = ptFindPatameter;
     try {
-      const patient = await this.pool.query(
-        'SELECT * FROM patients WHERE user_id = $1 AND name = $2 AND lname = $3',
-        [userID, name, lname],
-      );
-      return patient.rows[0];
+      if (pt_id) {
+        const patient = await this.pool.query(
+          'SELECT * FROM patients WHERE user_id = $1 AND pt_id = $2',
+          [userID, pt_id],
+        );
+        return patient.rows[0];
+      } else {
+        const patient = await this.pool.query(
+          'SELECT * FROM patients WHERE user_id = $1 AND name = $2 AND lname = $3',
+          [userID, name, lname],
+        );
+        return patient.rows[0];
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -41,6 +50,23 @@ export class PatientRepository {
         ],
       );
       return createPatient.rows[0];
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async findAllPatients(userID: number, queryParameters: string) {
+    const queryParams: (number | string)[] = [userID];
+    const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];
+    if (queryParameters) {
+      queryParams.push(queryParameters);
+      queryParts.push(
+        'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR UPPER(hn) ~ UPPER($2) OR tel ~ $2)',
+      );
+    }
+    const queryString = queryParts.join(' ');
+    try {
+      const patients = await this.pool.query(queryString, queryParams);
+      return patients.rows;
     } catch (error) {
       throw new Error(error);
     }
