@@ -9,6 +9,7 @@ type AuthProviderProp = {
   children: React.ReactNode;
 };
 export interface AuthContextValues {
+  state: {};
   signIn: (username: string, password: string) => Promise<number>;
   signUp: (username: string, password: string) => Promise<any>;
   signOut: () => void;
@@ -68,7 +69,9 @@ const AuthProvider: React.FC<AuthProviderProp> = ({ children }) => {
   };
   const isAuthenticated = Boolean(localStorage.getItem('token'));
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ state, signIn, signUp, signOut, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
