@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientDto } from './dto/create-patient.dto';
+import { UpdatePatientDto } from './dto/update-patient.dto';
 import * as pg from 'pg';
 
 @Injectable()
@@ -15,8 +16,8 @@ export class PatientRepository {
     try {
       if (pt_id) {
         const patient = await this.pool.query(
-          'SELECT * FROM patients WHERE user_id = $1 AND pt_id = $2',
-          [userID, pt_id],
+          'SELECT * FROM patients WHERE pt_id = $1',
+          [pt_id],
         );
         return patient.rows[0];
       } else {
@@ -26,6 +27,23 @@ export class PatientRepository {
         );
         return patient.rows[0];
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async findAllPatients(userID: number, queryParameters: string) {
+    const queryParams: (number | string)[] = [userID];
+    const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];
+    if (queryParameters) {
+      queryParams.push(queryParameters);
+      queryParts.push(
+        'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR UPPER(hn) ~ UPPER($2) OR tel ~ $2)',
+      );
+    }
+    const queryString = queryParts.join(' ');
+    try {
+      const patients = await this.pool.query(queryString, queryParams);
+      return patients.rows;
     } catch (error) {
       throw new Error(error);
     }
@@ -54,19 +72,48 @@ export class PatientRepository {
       throw new Error(error);
     }
   }
-  async findAllPatients(userID: number, queryParameters: string) {
-    const queryParams: (number | string)[] = [userID];
-    const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];
-    if (queryParameters) {
-      queryParams.push(queryParameters);
-      queryParts.push(
-        'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR UPPER(hn) ~ UPPER($2) OR tel ~ $2)',
-      );
-    }
-    const queryString = queryParts.join(' ');
+  async deletePatient(pt_id: number) {
     try {
-      const patients = await this.pool.query(queryString, queryParams);
-      return patients.rows;
+      const deletePt = await this.pool.query(
+        'DELETE FROM patients WHERE pt_id = $1',
+        [pt_id],
+      );
+      return deletePt;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async updataPatient(pt_id: number, data: UpdatePatientDto) {
+    const {
+      name,
+      lname,
+      age,
+      UD,
+      address,
+      tel,
+      height,
+      weight,
+      smoke,
+      alcohol,
+    } = data;
+    try {
+      const updataPatientPt = await this.pool.query(
+        'UPDATE patients SET name = $2, lname = $3, age = $4, ud = $5, address = $6, tel = $7, height = $8, weight = $9, smoke = $10, alcohol = $11 WHERE pt_id = $1',
+        [
+          pt_id,
+          name,
+          lname,
+          age,
+          UD,
+          address,
+          tel,
+          height,
+          weight,
+          smoke,
+          alcohol,
+        ],
+      );
+      return updataPatientPt;
     } catch (error) {
       throw new Error(error);
     }
