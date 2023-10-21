@@ -30,7 +30,7 @@ export class PatientRepository {
       throw new Error(error);
     }
   }
-  async createPatient(data: CreatePatientDto) {
+  async createPatient(userID: number, data: CreatePatientDto) {
     try {
       const createPatient = await this.pool.query(
         'INSERT INTO patients (hn,name,lname,age,ud,address,tel,height,weight,smoke,alcohol,user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *',
@@ -46,7 +46,7 @@ export class PatientRepository {
           data.weight,
           data.smoke,
           data.alcohol,
-          data.userID,
+          userID,
         ],
       );
       return createPatient.rows[0];

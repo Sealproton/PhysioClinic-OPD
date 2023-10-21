@@ -4,15 +4,15 @@ import { CreatePatientDto } from './dto/create-patient.dto';
 @Injectable()
 export class PatientsService {
   constructor(private repo: PatientRepository) {}
-  async createPatient(body: CreatePatientDto) {
-    const foundPt = await this.repo.findPatient(body.userID, {
+  async createPatient(userID: number, body: CreatePatientDto) {
+    const foundPt = await this.repo.findPatient(userID, {
       name: body.name,
       lname: body.lname,
     });
     if (foundPt) {
       throw new BadRequestException('pt exist');
     }
-    const createPt = await this.repo.createPatient(body);
+    const createPt = await this.repo.createPatient(userID, body);
     return createPt;
   }
   async getPatients(userID: number, query: string) {

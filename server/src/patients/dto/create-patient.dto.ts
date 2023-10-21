@@ -1,8 +1,6 @@
 import { IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreatePatientDto {
-  @IsNumber()
-  userID: number;
   @IsString()
   HN: string;
   @IsString()
