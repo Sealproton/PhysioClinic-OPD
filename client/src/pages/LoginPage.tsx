@@ -74,7 +74,7 @@ const LoginPage: React.FC = () => {
               to='/signup'
               className='ml-1 font-semibold text-blue-500 text-[0.8rem] hover:underline cursor-pointer'
             >
-              Create Acoount
+              Create Acount
             </Link>
           </div>
           <form className='flex gap-1 flex-col w-full mt-3'>
