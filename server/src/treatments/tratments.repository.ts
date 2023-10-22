@@ -33,4 +33,25 @@ export class TreatmentsRepository {
       throw new Error(error);
     }
   }
+
+  async getTreatment(where: string) {
+    const condition = where.split('=');
+    try {
+      if (condition[0].trim() === 'pt_id') {
+        const treatments = await this.pool.query(
+          'SELECT * FROM treatments WHERE pt_id = $1',
+          [Number(condition[1].trim())],
+        );
+        return treatments.rows;
+      } else {
+        const treatment = await this.pool.query(
+          'SELECT * FROM treatments WHERE tx_id = $1',
+          [Number(condition[1].trim())],
+        );
+        return treatment.rows[0];
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

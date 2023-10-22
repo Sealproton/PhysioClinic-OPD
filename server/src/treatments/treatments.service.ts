@@ -17,4 +17,12 @@ export class TreatmentsService {
     const createTx = await this.txrepo.createTreatment(pt_id, body);
     return createTx;
   }
+  async getAllTx(pt_id: number) {
+    const treatments = await this.txrepo.getTreatment(`pt_id = ${pt_id}`);
+    return treatments;
+  }
+  async getSingleTx(tx_id: number) {
+    const treatment = await this.txrepo.getTreatment(`tx_id = ${tx_id}`);
+    return treatment;
+  }
 }
