@@ -4,7 +4,9 @@ import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './ContextAPI/authContext.tsx';
 import './index.css';
+import jwtInterceptor from './Interceptors/axiosInterceptor.ts';
 
+jwtInterceptor();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
