@@ -31,7 +31,9 @@ export class PatientRepository {
       throw new Error(error);
     }
   }
-  async findAllPatients(userID: number, queryParameters: string) {
+  async findAllPatients(userID: number, queryandpage: string) {
+    const [queryParameters, page] = queryandpage.split('/');
+    const offset = (Number(page) - 1) * 10;
     const queryParams: (number | string)[] = [userID];
     const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];
     if (queryParameters) {
@@ -40,10 +42,19 @@ export class PatientRepository {
         'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR UPPER(hn) ~ UPPER($2) OR tel ~ $2)',
       );
     }
+    queryParts.push(`ORDER BY created_at ASC LIMIT 10 OFFSET ${offset}`);
     const queryString = queryParts.join(' ');
     try {
-      const patients = await this.pool.query(queryString, queryParams);
-      return patients.rows;
+      const quertPatients = await this.pool.query(queryString, queryParams);
+      const allPatient = await this.pool.query(
+        'SELECT * FROM patients WHERE user_id = $1',
+        [userID],
+      );
+      return {
+        data: quertPatients.rows,
+        count: allPatient.rows.length,
+        allPatient: allPatient.rows,
+      };
     } catch (error) {
       throw new Error(error);
     }

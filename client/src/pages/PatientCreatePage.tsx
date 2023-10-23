@@ -21,11 +21,14 @@ interface CreatePatient {
 }
 
 const getHn = (ptData: any) => {
+  console.log(ptData.allPatient);
   const currentYear = (new Date().getFullYear() + 543) % 100;
-  const getLastedPtYear = Number(ptData[ptData.length - 1]?.hn.split('/')[0]);
+  const getLastedPtYear = Number(
+    ptData.allPatient[Number(ptData.count) - 1]?.hn.split('/')[0]
+  );
   const getLastedPtNumber =
     currentYear === getLastedPtYear
-      ? Number(ptData[ptData.length - 1].hn.split('/')[1])
+      ? Number(ptData.allPatient[Number(ptData.count) - 1].hn.split('/')[1])
       : 0;
   return `${currentYear}/${getLastedPtNumber + 1}`;
 };
@@ -45,7 +48,7 @@ const CreatePatient: React.FC = () => {
     queryKey: ['PT'],
     queryFn: async () => {
       const data = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/patients?query=`
+        `${import.meta.env.VITE_SERVER_URL}/patients?query=/1`
       );
       return data.data;
     },

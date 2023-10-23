@@ -24,6 +24,8 @@ interface patientData {
 }
 const PatientsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+
   const {
     data: ptData,
     isError,
@@ -33,7 +35,9 @@ const PatientsPage: React.FC = () => {
     queryKey: ['PT'],
     queryFn: async () => {
       const data = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/patients?query=${searchTerm}`
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/patients?query=${searchTerm}/${page}`
       );
       return data.data;
     },
@@ -115,12 +119,12 @@ const PatientsPage: React.FC = () => {
       )}
       <section
         id='PT listed Container'
-        className={`w-full flex flex-col gap-2 items-center mt-3 md:gap-4 lg:gap-4 xl:w-[90%] ${
+        className={`w-full flex min-h-[80%] flex-col gap-2 items-center mt-3 md:gap-4 lg:gap-4 xl:w-[90%] ${
           isError && 'hidden'
         } ${isLoading && 'hidden'}`}
       >
         <h1 className='w-full text-[0.8rem] text-gray-500 text-center my-[-5px] font-semibold md:text-[1rem] md:my-[-2px]'>
-          Total patients: {ptData?.length}
+          Total patients: {ptData?.count}
         </h1>
         <div className='w-full justify-center mb-1  px-1 grid grid-cols-[12%_26%_36%_12%_14%] border-b-[1px] border-gray-400 md:mb-2 '>
           <h1 className='text-center text-[1rem] font-semibold md:text-[1.4rem]'>
@@ -140,22 +144,22 @@ const PatientsPage: React.FC = () => {
           </h1>
         </div>
 
-        {ptData?.map((data: patientData, index: number) => {
+        {ptData?.data.map((data: patientData, index: number) => {
           return (
             <div
               key={index}
               className='w-full justify-center items-center px-1 grid grid-cols-[12%_26%_36%_12%_14%] h-[32px] border-[1px] border-gray-500 bg-[#efeae4] rounded-md md:h-[50px] xl:h-[60px]'
             >
-              <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
+              <h1 className='text-center text-[0.6rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.hn}
               </h1>
-              <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
+              <h1 className='text-center text-[0.6rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.name}
               </h1>
-              <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
+              <h1 className='text-center text-[0.6rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.lname}
               </h1>
-              <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
+              <h1 className='text-center text-[0.6rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.age}
               </h1>
               <h1 className='text-center text-[1.2rem]  font-semibold md:text-[1.8rem] cursor-pointer'>
@@ -166,14 +170,40 @@ const PatientsPage: React.FC = () => {
         })}
         <footer
           className={`${
-            ptData?.length < 16 && 'hidden'
-          } w-full flex justify-center items-center mt-3 gap-2 md:mt-8`}
+            Number(ptData?.count) < 11 && 'hidden'
+          } w-full flex justify-center items-center mt-5 gap-2 md:mt-8`}
         >
-          <FiChevronsLeft className='text-[1.8rem] text-gray-500 md:text-[2rem]' />
+          <FiChevronsLeft
+            className={`${
+              page === 1 ? ' text-gray-300 ' : 'text-gray-500'
+            } text-[1.8rem]  md:text-[2rem] cursor-pointer`}
+            onClick={() => {
+              page === 1 ? setPage(1) : setPage(page - 1);
+              const refetcher = debounce(() => {
+                refetch();
+              }, 200);
+              refetcher();
+            }}
+          />
           <h1 className='text-[1rem] font-semibold text-gray-800 md:text-[1.5rem]'>
-            Page 2
+            Page {page}
           </h1>
-          <FiChevronsRight className='text-[1.8rem] text-gray-500 md:text-[2rem]' />
+          <FiChevronsRight
+            className={`${
+              page > Number(ptData?.count) % 10
+                ? ' text-gray-300 '
+                : 'text-gray-500'
+            } text-[1.8rem] text-gray-500 md:text-[2rem] cursor-pointer`}
+            onClick={() => {
+              page > Number(ptData?.count) % 10
+                ? setPage(page)
+                : setPage(page + 1);
+              const refetcher = debounce(() => {
+                refetch();
+              }, 200);
+              refetcher();
+            }}
+          />
         </footer>
       </section>
     </div>
