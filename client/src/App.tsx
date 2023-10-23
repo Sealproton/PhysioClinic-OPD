@@ -5,7 +5,7 @@ import './App.css';
 import { useAuth } from './ContextAPI/authContext';
 import { AuthContextValues } from './ContextAPI/authContext';
 function App() {
-  const { isAuthenticated, state } = useAuth() as AuthContextValues;
+  const { isAuthenticated} = useAuth() as AuthContextValues;
   return (
     <ChakraProvider>
       <div className='flex justify-center w-screen min-h-screen bg-gray-100 font-[Roboto]'>

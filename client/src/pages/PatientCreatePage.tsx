@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { CircularProgress } from '@chakra-ui/react';
-import { useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 interface CreatePatient {
@@ -31,7 +30,6 @@ const getHn = (ptData: any) => {
   return `${currentYear}/${getLastedPtNumber + 1}`;
 };
 const CreatePatient: React.FC = () => {
-  const toast = useToast();
   const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [lname, setLname] = useState<string>('');
