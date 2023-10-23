@@ -1,5 +1,11 @@
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
+import { useQuery } from '@tanstack/react-query';
+import { CircularProgress } from '@chakra-ui/react';
+import axios from 'axios';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { debounce } from 'lodash';
+
 interface patientData {
   pt_id: number;
   created_at: string;
@@ -244,6 +250,28 @@ export const mockdata: patientData[] = [
 ];
 
 const PatientsPage: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const {
+    data: ptData,
+    isError,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['PT'],
+    queryFn: async () => {
+      const data = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/patients?query=${searchTerm}`
+      );
+      return data.data;
+    },
+  });
+  const handleSearch = debounce((e) => {
+    setSearchTerm(e.target.value);
+    const refetcher = debounce(() => {
+      refetch();
+    }, 200);
+    refetcher();
+  }, 500);
   return (
     <div className='w-full p-4 flex flex-col items-center md:p-8 md:px-10 lg:px-28 xl:px-40'>
       <header className='w-full flex flex-col items-center'>
@@ -272,14 +300,33 @@ const PatientsPage: React.FC = () => {
           id='search'
           placeholder='ex. Morgan Arthor, 66/17'
           className='w-[80%] h-[1.8rem] text-[0.8rem] bg-gray-200 rounded-md border-[0.5px] border-amber-500 pl-2 md:h-[2.5rem] md:text-[1.2rem]'
+          onChange={(e) => handleSearch(e)}
         ></input>
       </section>
+
+      {isLoading && (
+        <div className=' mt-44'>
+          <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
+        </div>
+      )}
+      {isError && (
+        <div className=' mt-44'>
+          <h1
+            className='text-gray-400 text-[1.2rem] cursor-pointer'
+            onClick={() => refetch()}
+          >
+            Something wrong Tap here to retry
+          </h1>
+        </div>
+      )}
       <section
         id='PT listed Container'
-        className=' w-full flex flex-col gap-2 items-center mt-3 md:gap-4 lg:gap-4 xl:w-[90%]'
+        className={`w-full flex flex-col gap-2 items-center mt-3 md:gap-4 lg:gap-4 xl:w-[90%] ${
+          isError && 'hidden'
+        } ${isLoading && 'hidden'}`}
       >
         <h1 className='w-full text-[0.8rem] text-gray-500 text-center my-[-5px] font-semibold md:text-[1rem] md:my-[-2px]'>
-          Total patients: {mockdata.length}
+          Total patients: {ptData?.length}
         </h1>
         <div className='w-full justify-center mb-1  px-1 grid grid-cols-[12%_26%_36%_12%_14%] border-b-[1px] border-gray-400 md:mb-2 '>
           <h1 className='text-center text-[1rem] font-semibold md:text-[1.4rem]'>
@@ -299,9 +346,12 @@ const PatientsPage: React.FC = () => {
           </h1>
         </div>
 
-        {mockdata.map((data: patientData) => {
+        {ptData?.map((data: patientData, index: number) => {
           return (
-            <div className='w-full justify-center items-center px-1 grid grid-cols-[12%_26%_36%_12%_14%] h-[32px] border-[1px] border-gray-500 bg-[#efeae4] rounded-md md:h-[50px] xl:h-[60px]'>
+            <div
+              key={index}
+              className='w-full justify-center items-center px-1 grid grid-cols-[12%_26%_36%_12%_14%] h-[32px] border-[1px] border-gray-500 bg-[#efeae4] rounded-md md:h-[50px] xl:h-[60px]'
+            >
               <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.hn}
               </h1>
@@ -320,7 +370,11 @@ const PatientsPage: React.FC = () => {
             </div>
           );
         })}
-        <footer className='w-full flex justify-center items-center mt-3 gap-2 md:mt-8'>
+        <footer
+          className={`${
+            ptData?.length < 16 && 'hidden'
+          } w-full flex justify-center items-center mt-3 gap-2 md:mt-8`}
+        >
           <FiChevronsLeft className='text-[1.8rem] text-gray-500 md:text-[2rem]' />
           <h1 className='text-[1rem] font-semibold text-gray-800 md:text-[1.5rem]'>
             Page 2
