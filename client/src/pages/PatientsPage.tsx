@@ -1,4 +1,5 @@
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 interface patientData {
   pt_id: number;
   created_at: string;
@@ -14,7 +15,7 @@ interface patientData {
   smoke: boolean;
   alcohol: boolean;
 }
-const mockdata: patientData[] = [
+export const mockdata: patientData[] = [
   {
     pt_id: 32,
     created_at: '2023-10-20T23:40:21.803Z',
@@ -228,7 +229,7 @@ const mockdata: patientData[] = [
   {
     pt_id: 32,
     created_at: '2023-10-20T23:40:21.803Z',
-    hn: '66/1',
+    hn: '66/2',
     name: 'John3',
     lname: 'Terry2',
     age: 25,
@@ -247,11 +248,13 @@ const PatientsPage: React.FC = () => {
     <div className='w-full p-4 flex flex-col items-center md:p-8 md:px-10 lg:px-28 xl:px-40'>
       <header className='w-full flex flex-col items-center'>
         <div className='w-full flex justify-end'>
-          <h1 className='text-[0.8rem] font-bold  bg-amber-200 p-2 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[1.2rem] md:p-3'>
-            Create Patients
-          </h1>
+          <Link to='/create'>
+            <h1 className='text-[0.8rem] font-bold  bg-amber-200 p-2 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[1.2rem] md:p-3'>
+              Create Patients
+            </h1>
+          </Link>
         </div>
-        <h1 className='mt-2 font-extrabold text-[2rem] tracking-wide drop-shadow-sm md:text-[3rem] lg:text-[3.5rem]'>
+        <h1 className='mt-2 font-extrabold text-[2rem] tracking-wide drop-shadow-sm md:text-[3rem] lg:text-[3.5rem] lx:mt-0'>
           OPD Patients
         </h1>
       </header>
@@ -278,7 +281,7 @@ const PatientsPage: React.FC = () => {
         <h1 className='w-full text-[0.8rem] text-gray-500 text-center my-[-5px] font-semibold md:text-[1rem] md:my-[-2px]'>
           Total patients: {mockdata.length}
         </h1>
-        <div className='w-full justify-center mb-1  px-1 grid grid-cols-[12%_28%_38%_12%_10%] border-b-[1px] border-gray-400 md:mb-2 '>
+        <div className='w-full justify-center mb-1  px-1 grid grid-cols-[12%_26%_36%_12%_14%] border-b-[1px] border-gray-400 md:mb-2 '>
           <h1 className='text-center text-[1rem] font-semibold md:text-[1.4rem]'>
             H.N
           </h1>
@@ -292,13 +295,13 @@ const PatientsPage: React.FC = () => {
             Age
           </h1>
           <h1 className='text-center text-[1rem] font-semibold md:text-[1.4rem]'>
-            Edit
+            Doc
           </h1>
         </div>
 
         {mockdata.map((data: patientData) => {
           return (
-            <div className='w-full justify-center items-center px-1 grid grid-cols-[12%_28%_38%_12%_10%] h-[32px] border-[1px] border-gray-500 bg-[#efeae4] rounded-md md:h-[50px]'>
+            <div className='w-full justify-center items-center px-1 grid grid-cols-[12%_26%_36%_12%_14%] h-[32px] border-[1px] border-gray-500 bg-[#efeae4] rounded-md md:h-[50px] xl:h-[60px]'>
               <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.hn}
               </h1>
@@ -311,7 +314,7 @@ const PatientsPage: React.FC = () => {
               <h1 className='text-center text-[0.8rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.age}
               </h1>
-              <h1 className='text-center text-[0.8rem]  font-semibold md:text-[1.2rem]'>
+              <h1 className='text-center text-[1.2rem]  font-semibold md:text-[1.8rem] cursor-pointer'>
                 📝
               </h1>
             </div>

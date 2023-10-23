@@ -8,7 +8,7 @@ function App() {
   const { isAuthenticated, state } = useAuth() as AuthContextValues;
   return (
     <ChakraProvider>
-      <div className='flex w-screen min-h-screen bg-gray-100 font-[Roboto]'>
+      <div className='flex justify-center w-screen min-h-screen bg-gray-100 font-[Roboto]'>
         {isAuthenticated ? <AuthenticationApp /> : <UnauthenticationApp />}
       </div>
     </ChakraProvider>

@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import PatientsPage from './PatientsPage';
-import SignupPage from './SignUpPage';
+import CreatePatient from './PatientCreatePage';
 
 const AuthenticationApp: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<PatientsPage />} />
-      <Route path='/signup' element={<SignupPage />} />
+      <Route path='/create' element={<CreatePatient />} />
       <Route />
     </Routes>
   );
