@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { FcPrevious } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
-import { mockdata } from './PatientsPage';
+import axios from 'axios';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { CircularProgress } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 interface CreatePatient {
   HN: string;
   name: string;
@@ -10,32 +15,93 @@ interface CreatePatient {
   UD: string;
   address: string;
   tel: string;
-  height: number;
-  weight: number;
+  height: number | null;
+  weight: number | null;
   smoke: boolean;
   alcohol: boolean;
 }
-const currentYear = (new Date().getFullYear() + 543) % 100;
-const getLastedPtYear = Number(mockdata[mockdata.length - 1].hn.split('/')[0]);
-const getLastedPtNumber =
-  currentYear === getLastedPtYear
-    ? Number(mockdata[mockdata.length - 1].hn.split('/')[1])
-    : 0;
 
+const getHn = (ptData: any) => {
+  const currentYear = (new Date().getFullYear() + 543) % 100;
+  const getLastedPtYear = Number(ptData[ptData.length - 1]?.hn.split('/')[0]);
+  const getLastedPtNumber =
+    currentYear === getLastedPtYear
+      ? Number(ptData[ptData.length - 1].hn.split('/')[1])
+      : 0;
+  return `${currentYear}/${getLastedPtNumber + 1}`;
+};
 const CreatePatient: React.FC = () => {
-  const [HN, setHN] = useState<string>(
-    `${currentYear}/${getLastedPtNumber + 1}`
-  );
+  const toast = useToast();
+  const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [lname, setLname] = useState<string>('');
-  const [age, setAge] = useState<number>(100);
+  const [age, setAge] = useState<number | null>(0);
   const [UD, setUD] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [tel, setTel] = useState<string>('');
-  const [height, setHeight] = useState<number | null>(null);
-  const [weight, setWeight] = useState<number | null>(null);
+  const [height, setHeight] = useState<number | null>(0);
+  const [weight, setWeight] = useState<number | null>(0);
   const [smoke, setSmoke] = useState<boolean>(false);
   const [alcohol, setAlcohol] = useState<boolean>(false);
+  const { data: ptData, isLoading } = useQuery({
+    queryKey: ['PT'],
+    queryFn: async () => {
+      const data = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/patients?query=`
+      );
+      return data.data;
+    },
+  });
+  const { mutate: createPatientFn } = useMutation({
+    mutationFn: (patient: CreatePatient): any => {
+      return axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/patients/create`,
+        patient
+      );
+    },
+    onSuccess: () => {
+      Swal.fire('Created!', 'Patient data hasbeen created.', 'success');
+      navigate('/');
+    },
+    onError: () => {
+      Swal.fire('Error!', 'Create patient fail.', 'error');
+    },
+  });
+  if (isLoading) {
+    return (
+      <div className=' mt-44'>
+        <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
+      </div>
+    );
+  }
+  const handleSubmit = () => {
+    const formPatient: CreatePatient = {
+      HN: getHn(ptData),
+      name: name,
+      lname: lname,
+      age: age ? age : 0,
+      UD: UD,
+      address: address,
+      tel: tel,
+      height: height ? height : 0,
+      weight: weight ? weight : 0,
+      smoke: smoke,
+      alcohol: alcohol,
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Your patient data will be created!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, create it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        createPatientFn(formPatient);
+      }
+    });
+  };
   return (
     <div className='relative w-full py-3 px-4 md:px-10 md:py-8 xl:w-3/4'>
       <section>
@@ -52,7 +118,8 @@ const CreatePatient: React.FC = () => {
         </label>
         <input
           id='hn'
-          value={HN}
+          value={getHn(ptData)}
+          disabled
           className='w-[100px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem]'
         ></input>
       </section>
@@ -92,7 +159,7 @@ const CreatePatient: React.FC = () => {
           <input
             id='age'
             type='number'
-            value={age}
+            value={age as number}
             onChange={(e) => setAge(Number(e.target.value))}
             className='w-[45px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem] md:w-[90px]'
           ></input>
@@ -153,6 +220,7 @@ const CreatePatient: React.FC = () => {
           <input
             id='tel'
             value={tel}
+            maxLength={10}
             onChange={(e) => setTel(e.target.value)}
             className='w-[200px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[350px]'
           ></input>
@@ -185,7 +253,7 @@ const CreatePatient: React.FC = () => {
             id='smoke'
             value={smoke === true ? 'true' : 'false'}
             onChange={(e) => setSmoke(e.target.value === 'true' ? true : false)}
-            className='w-[65px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[100px]'
+            className='z-50  w-[65px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[100px] cursor-pointer'
           >
             <option value='false'>No</option>
             <option value='true'>Yes</option>
@@ -204,7 +272,7 @@ const CreatePatient: React.FC = () => {
             onChange={(e) =>
               setAlcohol(e.target.value === 'true' ? true : false)
             }
-            className='w-[65px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[100px]'
+            className=' z-50 w-[65px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[100px] cursor-pointer'
           >
             <option value='false'>No</option>
             <option value='true'>Yes</option>
@@ -212,7 +280,10 @@ const CreatePatient: React.FC = () => {
         </div>
       </section>
       <div className='absolute bottom-4 right-1 w-full flex justify-end pr-3 md:bottom-10 md:right-8 xl:bottom-14 xl:right-0'>
-        <button className='text-[1rem] font-bold w-[100px]  bg-amber-200 p-2 rounded-xl border-[1.2px] border-gray-400 shadow-lg md:text-[1.8rem] md:p-3 md:w-[200px] md:tracking-wide'>
+        <button
+          onClick={handleSubmit}
+          className='text-[1rem] font-bold w-[100px]  bg-amber-200 p-2 rounded-xl border-[1.2px] border-gray-400 shadow-lg md:text-[1.8rem] md:p-3 md:w-[200px] md:tracking-wide'
+        >
           Submit
         </button>
       </div>
