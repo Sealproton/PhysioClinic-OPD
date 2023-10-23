@@ -33,12 +33,12 @@ const CreatePatient: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [lname, setLname] = useState<string>('');
-  const [age, setAge] = useState<number | null>(0);
+  const [age, setAge] = useState<number | null>(null);
   const [UD, setUD] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [tel, setTel] = useState<string>('');
-  const [height, setHeight] = useState<number | null>(0);
-  const [weight, setWeight] = useState<number | null>(0);
+  const [height, setHeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<number | null>(null);
   const [smoke, setSmoke] = useState<boolean>(false);
   const [alcohol, setAlcohol] = useState<boolean>(false);
   const { data: ptData, isLoading } = useQuery({
@@ -101,7 +101,7 @@ const CreatePatient: React.FC = () => {
     });
   };
   return (
-    <div className='relative w-full py-3 px-4 md:px-10 md:py-8 xl:w-3/4'>
+    <div className='relative w-full py-3 px-2 md:px-8 md:py-8 xl:w-3/4'>
       <section>
         <Link to='/'>
           <button className='flex p-2 items-center md:text-2xl'>
