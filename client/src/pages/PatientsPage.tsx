@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
+import Swal from 'sweetalert2';
 
 interface patientData {
   pt_id: number;
@@ -21,8 +22,6 @@ interface patientData {
   smoke: boolean;
   alcohol: boolean;
 }
-
-
 const PatientsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const {
@@ -49,7 +48,28 @@ const PatientsPage: React.FC = () => {
   return (
     <div className='w-full p-4 flex flex-col items-center md:p-8 md:px-10 lg:px-28 xl:px-40'>
       <header className='w-full flex flex-col items-center'>
-        <div className='w-full flex justify-end'>
+        <div className='w-full flex justify-between'>
+          <button
+            className='text-[0.5rem] font-bold h-[20px] bg-red-200 px-1 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[0.8rem] md:h-[35px] md:p-2'
+            onClick={() => {
+              Swal.fire({
+                title: 'Are you sure?',
+                text: 'Your account will be signed out!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sign out!',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.localStorage.removeItem('token');
+                  window.location.reload();
+                }
+              });
+            }}
+          >
+            Sign out
+          </button>
           <Link to='/create'>
             <h1 className='text-[0.8rem] font-bold  bg-amber-200 p-2 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[1.2rem] md:p-3'>
               Create Patients
