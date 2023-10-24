@@ -40,7 +40,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
     onSuccess: () => {
       Swal.fire('Edited!', 'Treatment created.', 'success');
       setBp('');
-      setHr(null);
+      setHr(0);
       setCc('');
       setPi('');
       setPh('');
@@ -107,6 +107,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <input
             id='bp'
+            value={bp}
             onChange={(e) => setBp(e.target.value)}
             className='w-[50%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></input>
@@ -122,6 +123,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           <input
             id='hr'
             type='number'
+            value={hr as number}
             onChange={(e) => setHr(Number(e.target.value))}
             className='w-[50%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></input>
@@ -138,6 +140,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <textarea
             id='cc'
+            value={cc}
             onChange={(e) => setCc(e.target.value)}
             className='w-[90%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></textarea>
@@ -151,6 +154,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <textarea
             id='pi'
+            value={pi}
             onChange={(e) => setPi(e.target.value)}
             className='w-[90%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></textarea>
@@ -164,6 +168,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <textarea
             id='ph'
+            value={ph}
             onChange={(e) => setPh(e.target.value)}
             className='w-[90%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></textarea>
@@ -177,6 +182,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <textarea
             id='pe'
+            value={pe}
             onChange={(e) => setPe(e.target.value)}
             className='w-[90%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
           ></textarea>
@@ -236,6 +242,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <textarea
             id='result'
+            value={result}
             onChange={(e) => setResult(e.target.value)}
             className='w-[85%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem] xl:w-[90%]'
           ></textarea>
@@ -249,6 +256,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
           </label>
           <input
             id='tx_name'
+            value={tx_name}
             onChange={(e) => setTx_name(e.target.value)}
             className='w-[40%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem] '
           ></input>
