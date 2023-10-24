@@ -173,7 +173,7 @@ const CreatePatient: React.FC = () => {
             type='number'
             value={age as number}
             onChange={(e) => setAge(Number(e.target.value))}
-            className='w-[45px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem] md:w-[90px]'
+            className='w-[40px] pl-1 border-[1px] border-gray-500 rounded-md md:text-[1.6rem] md:w-[90px]'
           ></input>
         </div>
         <div className='flex '>
@@ -188,7 +188,7 @@ const CreatePatient: React.FC = () => {
             type='number'
             onChange={(e) => setWeight(Number(e.target.value))}
             value={weight as number}
-            className='w-[50px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem] md:w-[90px]'
+            className='w-[45px] pl-1 border-[1px] border-gray-500 rounded-md md:text-[1.6rem] md:w-[90px]'
           ></input>
         </div>
         <div className=' flex '>
@@ -203,7 +203,7 @@ const CreatePatient: React.FC = () => {
             type='number'
             onChange={(e) => setHeight(Number(e.target.value))}
             value={height as number}
-            className='w-[50px] pl-2 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[90px]'
+            className='w-[45px] pl-1 border-[1px] border-gray-500  rounded-md md:text-[1.6rem] md:w-[90px]'
           ></input>
         </div>
       </section>

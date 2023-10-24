@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useToast } from '@chakra-ui/react';
@@ -18,6 +18,7 @@ interface TreatmentProp {
   pt_id: number;
 }
 const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
+  const queryClient = useQueryClient();
   const toast = useToast();
   const [bp, setBp] = useState<string>('');
   const [hr, setHr] = useState<number | null>(null);
@@ -48,6 +49,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
       setTx([]);
       setResult('');
       setTx_name('');
+      queryClient.refetchQueries({ queryKey: ['Tx', pt_id] });
     },
     onError: (error) => {
       Swal.fire('Error!', 'Create treatment fail.', 'error');
@@ -66,7 +68,6 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
       result,
       tx_name,
     };
-    console.log(formTxCreate);
     if (formTxCreate.tx_name === '') {
       return toast({
         title: 'Physiotherapist cannot be null',
@@ -78,7 +79,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
     }
     Swal.fire({
       title: 'Are you sure?',
-      text: 'YWould you like to create treatment!',
+      text: 'Would you like to create treatment!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

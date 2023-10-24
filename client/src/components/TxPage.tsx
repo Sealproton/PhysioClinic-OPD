@@ -31,6 +31,7 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
     data: txData,
     isError,
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: ['Tx', pt_id],
     queryFn: async () => {
@@ -40,16 +41,7 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
       return treatmentsData.data;
     },
   });
-  if (isLoading) {
-    return (
-      <div className=' mt-44'>
-        <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
-      </div>
-    );
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }
+
   const getDayMonthYear = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getUTCDate();
@@ -75,8 +67,23 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
         </h1>
         <div className='w-[10%]'></div>
       </div>
+      {isLoading && (
+        <div className=' mt-44'>
+          <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
+        </div>
+      )}
+      {isError && (
+        <div className=' mt-44'>
+          <h1
+            className='text-gray-400 text-[1.2rem] cursor-pointer'
+            onClick={() => refetch()}
+          >
+            Something wrong Tap here to retry
+          </h1>
+        </div>
+      )}
       <Accordion allowToggle w='100%'>
-        {txData.map((tx: TreatmentData, index: number) => {
+        {txData?.map((tx: TreatmentData, index: number) => {
           return (
             <AccordionItem w='100%' key={index}>
               <AccordionButton w='100%'>

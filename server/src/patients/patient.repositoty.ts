@@ -47,7 +47,7 @@ export class PatientRepository {
     try {
       const quertPatients = await this.pool.query(queryString, queryParams);
       const allPatient = await this.pool.query(
-        'SELECT * FROM patients WHERE user_id = $1',
+        'SELECT * FROM patients WHERE user_id = $1 ORDER BY created_at ASC',
         [userID],
       );
       return {
