@@ -54,7 +54,7 @@ const PatientsPage: React.FC = () => {
       <header className='w-full flex flex-col items-center'>
         <div className='w-full flex justify-between'>
           <button
-            className='text-[0.5rem] font-bold h-[20px] bg-gray-100 px-1 rounded-xl  md:text-[0.8rem] md:h-[35px] md:p-2 hover:text-gray-600'
+            className='text-[0.5rem] text-red-500 font-bold h-[20px] bg-gray-100 px-1 rounded-xl  md:text-[0.8rem] md:h-[35px] md:p-2 hover:text-gray-600'
             onClick={() => {
               Swal.fire({
                 title: 'Are you sure?',

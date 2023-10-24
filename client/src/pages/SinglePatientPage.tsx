@@ -4,13 +4,12 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { FcPrevious } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import { PatientHistoryProps } from '../components/PtHistory';
 import PatientHistory from '../components/PtHistory';
+import TreatmentPage from '../components/TxPage';
 import axios from 'axios';
 const SinglePatientPage: React.FC = () => {
   const { id } = useParams();
   const [ptID, setPtID] = useState<number>(Number(id) / 658243);
-  const [nav, setNav] = useState<string>('pt');
   const {
     data: patientData,
     isError: ptErr,
@@ -40,6 +39,9 @@ const SinglePatientPage: React.FC = () => {
   if (ptLoad || txLoad) {
     return <div>Loading</div>;
   }
+  if (ptErr || txErr) {
+    return <div>error</div>;
+  }
   // console.log(patientData);
   // console.log(txList);
   return (
@@ -54,11 +56,14 @@ const SinglePatientPage: React.FC = () => {
       </div>
       <Tabs align='center' w='100%' colorScheme='green' fontFamily='Roboto'>
         <TabList w='100%'>
-          <Tab w='50%' fontSize={{ base: '15px', md: '25px', lg: '28px' }}>
-            Patient History
+          <Tab w='20%' fontSize={{ base: '12px', md: '25px', lg: '28px' }}>
+            Patient
           </Tab>
-          <Tab w='50%' fontSize={{ base: '15px', md: '25px', lg: '28px' }}>
-            Treatment History
+          <Tab w='40%' fontSize={{ base: '12px', md: '25px', lg: '28px' }}>
+            Create Treatment
+          </Tab>
+          <Tab w='40%' fontSize={{ base: '12px', md: '25px', lg: '28px' }}>
+            Treatments History
           </Tab>
         </TabList>
         <TabPanels>
@@ -66,7 +71,10 @@ const SinglePatientPage: React.FC = () => {
             <PatientHistory {...patientData} />
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <TreatmentPage pt_id={patientData.pt_id} />
+          </TabPanel>
+          <TabPanel>
+            <TreatmentPage pt_id={patientData.pt_id} />
           </TabPanel>
         </TabPanels>
       </Tabs>

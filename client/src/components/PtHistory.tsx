@@ -127,8 +127,8 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
       text: 'Your patient will be deleted!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes!',
     }).then((result) => {
       if (result.isConfirmed) {
