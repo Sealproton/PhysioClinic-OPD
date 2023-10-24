@@ -16,7 +16,7 @@ import { QueryPatientsDto } from './dto/query-patients.dto';
 import { CurrentUser } from 'src/user/decorator/currentUser.decorator';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 @Controller('patients')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class PatientsController {
   constructor(private ptService: PatientsService) {}
   @Get('/')
@@ -25,6 +25,11 @@ export class PatientsController {
     @Query() { query }: QueryPatientsDto,
   ) {
     const result = this.ptService.getPatients(Number(userID), query);
+    return result;
+  }
+  @Get('/:pt_id')
+  getSinglePatient(@Param() { pt_id }) {
+    const result = this.ptService.getSinglePatient(Number(pt_id));
     return result;
   }
   @Post('/create')

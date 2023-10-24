@@ -54,7 +54,7 @@ const PatientsPage: React.FC = () => {
       <header className='w-full flex flex-col items-center'>
         <div className='w-full flex justify-between'>
           <button
-            className='text-[0.5rem] font-bold h-[20px] bg-red-200 px-1 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[0.8rem] md:h-[35px] md:p-2'
+            className='text-[0.5rem] font-bold h-[20px] bg-gray-100 px-1 rounded-xl  md:text-[0.8rem] md:h-[35px] md:p-2 hover:text-gray-600'
             onClick={() => {
               Swal.fire({
                 title: 'Are you sure?',
@@ -75,7 +75,7 @@ const PatientsPage: React.FC = () => {
             Sign out
           </button>
           <Link to='/create'>
-            <h1 className='text-[0.8rem] font-bold  bg-amber-200 p-2 rounded-xl border-[1px] border-gray-400 shadow-lg md:text-[1.2rem] md:p-3'>
+            <h1 className='text-[1rem] font-bold p-2 rounded-xl  md:text-[1.4rem] md:p-3 hover:text-gray-600'>
               Create Patients
             </h1>
           </Link>
