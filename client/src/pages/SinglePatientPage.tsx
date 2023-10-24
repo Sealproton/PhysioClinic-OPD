@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import PatientHistory from '../components/PtHistory';
 import TreatmentPage from '../components/TxPage';
+import CreateTreatment from '../components/TxCreate';
 import axios from 'axios';
 const SinglePatientPage: React.FC = () => {
   const { id } = useParams();
@@ -23,27 +24,14 @@ const SinglePatientPage: React.FC = () => {
       return patientData.data;
     },
   });
-  const {
-    data: txList,
-    isError: txErr,
-    isLoading: txLoad,
-  } = useQuery({
-    queryKey: ['Tx', ptID],
-    queryFn: async () => {
-      const treatment = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/treatments/${ptID}`
-      );
-      return treatment.data;
-    },
-  });
-  if (ptLoad || txLoad) {
+
+  if (ptLoad) {
     return <div>Loading</div>;
   }
-  if (ptErr || txErr) {
+  if (ptErr) {
     return <div>error</div>;
   }
-  // console.log(patientData);
-  // console.log(txList);
+
   return (
     <div className='flex flex-col w-full min-h-full xl:px-6'>
       <div className='w-fit mt-2 mb-2 xl:ml-3 xl:mt-5'>
@@ -71,7 +59,7 @@ const SinglePatientPage: React.FC = () => {
             <PatientHistory {...patientData} />
           </TabPanel>
           <TabPanel>
-            <TreatmentPage pt_id={patientData.pt_id} />
+            <CreateTreatment pt_id={patientData.pt_id} />
           </TabPanel>
           <TabPanel>
             <TreatmentPage pt_id={patientData.pt_id} />

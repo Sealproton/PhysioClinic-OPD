@@ -33,7 +33,6 @@ export class PatientRepository {
   }
   async findAllPatients(userID: number, queryandpage: string) {
     const [queryParameters, page] = queryandpage.split('?');
-
     const offset = (Number(page) - 1) * 10;
     const queryParams: (number | string)[] = [userID];
     const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];

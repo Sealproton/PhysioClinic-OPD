@@ -56,7 +56,7 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
       Swal.fire('Edited!', 'Patient data has been edied.', 'success');
       setEdit(false);
     },
-    onError: (error) => {
+    onError: () => {
       Swal.fire('Error!', 'Edit patient fail.', 'error');
       setEdit(false);
     },
@@ -160,7 +160,7 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
           className='w-[100px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem]'
         ></input>
       </section>
-      <section className='w-full font-semibold flex items-center justify-end gap-2 xl:mt-2'>
+      <section className='w-full text-[0.6rem] mt-2 font-semibold flex items-center justify-end gap-2 md:text-[1rem] xl:mt-2'>
         <h1>First visited at: {getDayMonthYear()}</h1>
       </section>
       <section className='w-full flex flex-col mt-6 xl:flex-row xl:mt-12 xl:items-center '>

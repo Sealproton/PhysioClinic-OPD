@@ -44,11 +44,15 @@ const CreatePatient: React.FC = () => {
   const [weight, setWeight] = useState<number | null>(null);
   const [smoke, setSmoke] = useState<boolean>(false);
   const [alcohol, setAlcohol] = useState<boolean>(false);
-  const { data: ptData, isLoading } = useQuery({
+  const {
+    data: ptData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['PT'],
     queryFn: async () => {
       const data = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/patients?query=/1`
+        `${import.meta.env.VITE_SERVER_URL}/patients?query=?1`
       );
       return data.data;
     },
@@ -72,6 +76,13 @@ const CreatePatient: React.FC = () => {
     return (
       <div className=' mt-44'>
         <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className=' mt-44'>
+        <h1>error</h1>
       </div>
     );
   }

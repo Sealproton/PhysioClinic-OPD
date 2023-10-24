@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { CircularProgress } from '@chakra-ui/react';
 import axios from 'axios';
 import {
   Accordion,
@@ -6,7 +7,6 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Box,
 } from '@chakra-ui/react';
 
 interface TreatmentProp {
@@ -41,7 +41,11 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
     },
   });
   if (isLoading) {
-    return <div>Loading</div>;
+    return (
+      <div className=' mt-44'>
+        <CircularProgress isIndeterminate color='green.300' w={9} h={9} />
+      </div>
+    );
   }
   if (isError) {
     return <div>Error</div>;
@@ -56,7 +60,7 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
   };
   return (
     <div className='w-full flex flex-col items-center'>
-      <h1 className='text-[1.2rem] text-center mb-3 h-[40px] border-b-2 w-full md:text-[1.5rem] xl:text-[2rem] xl:h-[60px]'>
+      <h1 className='text-[1.2rem] font-semibold text-center mb-3 h-[40px] border-b-2 w-full md:text-[1.5rem] xl:text-[2rem] xl:h-[60px]'>
         Treatments History
       </h1>
       <div className='mt-2 flex w-full  mb-2 xl:mt-4'>
@@ -72,9 +76,9 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
         <div className='w-[10%]'></div>
       </div>
       <Accordion allowToggle w='100%'>
-        {txData.map((tx: TreatmentData) => {
+        {txData.map((tx: TreatmentData, index: number) => {
           return (
-            <AccordionItem w='100%'>
+            <AccordionItem w='100%' key={index}>
               <AccordionButton w='100%'>
                 <div className='flex w-full items-center'>
                   <h1 className='text-[0.6rem]  w-[30%] md:text-[1.2rem]'>
@@ -131,9 +135,18 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
                       <h1 className='text-[0.6rem] w-[20%] font-bold md:text-[0.8rem] xl:text-[1.2rem]'>
                         🦴Tx:
                       </h1>
-                      <p className='text-[0.6rem] w-[80%] text-start md:text-[0.8rem] xl:text-[1.2rem]'>
-                        {tx.tx}
-                      </p>
+                      <div className='w-[80%]'>
+                        {tx.tx?.split('#=#').map((e, index) => {
+                          return (
+                            <p
+                              key={index}
+                              className='text-[0.6rem] w-full text-start md:text-[0.8rem] xl:text-[1.2rem]'
+                            >
+                              {index + 1}: {e}
+                            </p>
+                          );
+                        })}
+                      </div>
                     </div>
                     <div className='flex mt-2  w-full'>
                       <h1 className='text-[0.6rem] w-[20%] font-bold md:text-[0.8rem] xl:text-[1.2rem]'>
