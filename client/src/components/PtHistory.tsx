@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 export interface PatientHistoryProps {
   address: string;
   age: number;
@@ -32,6 +33,7 @@ interface editPatient {
   alcohol: boolean;
 }
 const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
+  const navigate = useNavigate();
   const [name, setName] = useState<string>(ptData.name);
   const [lname, setLname] = useState<string>(ptData.lname);
   const [age, setAge] = useState<number>(ptData.age);
@@ -57,6 +59,21 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
     onError: (error) => {
       Swal.fire('Error!', 'Edit patient fail.', 'error');
       setEdit(false);
+    },
+  });
+  const { mutate: deletePt } = useMutation({
+    mutationFn: (): any => {
+      return axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/patients/delete/${ptData.pt_id}`
+      );
+    },
+    onSuccess: () => {
+      Swal.fire('Deleted!', 'Patient has neet deleted.', 'success');
+      navigate('/');
+    },
+    onError: (error) => {
+      Swal.fire('Error!', 'Delete patient fail.', 'error');
+      console.log(error);
     },
   });
 
@@ -104,6 +121,32 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
       }
     });
   };
+  const handleDelete = async () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Your patient will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletePt();
+      }
+    });
+  };
+  const getDayMonthYear = () => {
+    const dateString = ptData.created_at;
+    const date = new Date(dateString);
+
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear();
+
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+  };
   return (
     <div className=' w-full py-3 md:px-8 md:py-8 xl:w-3/4'>
       <section className='w-full flex items-center justify-end gap-2 xl:mt-2'>
@@ -116,6 +159,9 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
           disabled
           className='w-[100px] pl-2 border-[1px] border-gray-500 rounded-md md:text-[1.6rem]'
         ></input>
+      </section>
+      <section className='w-full font-semibold flex items-center justify-end gap-2 xl:mt-2'>
+        <h1>First visited at: {getDayMonthYear()}</h1>
       </section>
       <section className='w-full flex flex-col mt-6 xl:flex-row xl:mt-12 xl:items-center '>
         <div className=' flex gap-9'>
@@ -286,15 +332,23 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
           onClick={handleCancle}
           className={`${
             !edit && 'hidden'
-          } bg-gray-200 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-gray-300 border-gray-300 md:text-[1.2rem] xl:text-[1.5rem]`}
+          } bg-gray-200 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-gray-300 border-gray-300 md:text-[1.2rem] xl:text-[1.2rem]`}
         >
           Cancle
+        </button>
+        <button
+          onClick={handleDelete}
+          className={`${
+            !edit && 'hidden'
+          } bg-red-300 text-red-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-gray-400 border-gray-300 md:text-[1.2rem] xl:text-[1.2rem]`}
+        >
+          Delete Profile
         </button>
         <button
           onClick={handleConfirm}
           className={`${
             !edit && 'hidden'
-          } bg-green-300 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-green-300 border-gray-300 md:text-[1.2rem] xl:text-[1.5rem]`}
+          } bg-green-300 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-green-300 border-gray-300 md:text-[1.2rem] xl:text-[1.2rem]`}
         >
           Confirm Editing
         </button>
@@ -302,7 +356,7 @@ const PatientHistory: React.FC<PatientHistoryProps> = (ptData) => {
           onClick={() => setEdit(true)}
           className={`${
             edit && 'hidden'
-          } bg-gray-300 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-gray-400 border-gray-300 md:text-[1.2rem] xl:text-[1.5rem]`}
+          } bg-gray-300 text-gray-800 text-[0.8rem] p-1 px-2 rounded-md border-[1px] hover:bg-gray-400 border-gray-300 md:text-[1.2rem] xl:text-[1.2rem]`}
         >
           Edit Profile
         </button>

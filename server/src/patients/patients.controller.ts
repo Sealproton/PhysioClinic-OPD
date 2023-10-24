@@ -16,7 +16,7 @@ import { QueryPatientsDto } from './dto/query-patients.dto';
 import { CurrentUser } from 'src/user/decorator/currentUser.decorator';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 @Controller('patients')
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class PatientsController {
   constructor(private ptService: PatientsService) {}
   @Get('/')
