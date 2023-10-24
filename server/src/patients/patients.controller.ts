@@ -27,6 +27,11 @@ export class PatientsController {
     const result = this.ptService.getPatients(Number(userID), query);
     return result;
   }
+  @Get('/:pt_id')
+  getSinglePatient(@Param() { pt_id }) {
+    const result = this.ptService.getSinglePatient(Number(pt_id));
+    return result;
+  }
   @Post('/create')
   createPatient(@CurrentUser() userID: string, @Body() body: CreatePatientDto) {
     const result = this.ptService.createPatient(Number(userID), body);

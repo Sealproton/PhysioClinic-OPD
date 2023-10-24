@@ -3,7 +3,7 @@ import { TreatmentsService } from './treatments.service';
 import { CreateTreatmentDto } from './dtos/create-treatment.dto';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 @Controller('treatments')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class TreatmentsController {
   constructor(private txService: TreatmentsService) {}
   @Post('/create/:pt_id')

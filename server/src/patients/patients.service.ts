@@ -36,4 +36,11 @@ export class PatientsService {
     const updatePt = await this.repo.updataPatient(pt_id, body);
     return updatePt;
   }
+  async getSinglePatient(pt_id: number) {
+    const patient = await this.repo.findPatient(null, { pt_id });
+    if (!patient) {
+      throw new BadRequestException('pt not found');
+    }
+    return patient;
+  }
 }
