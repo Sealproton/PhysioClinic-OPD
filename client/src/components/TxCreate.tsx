@@ -39,7 +39,15 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
     },
     onSuccess: () => {
       Swal.fire('Edited!', 'Treatment created.', 'success');
-      window.location.reload();
+      setBp('');
+      setHr(null);
+      setCc('');
+      setPi('');
+      setPh('');
+      setPe('');
+      setTx([]);
+      setResult('');
+      setTx_name('');
     },
     onError: (error) => {
       Swal.fire('Error!', 'Create treatment fail.', 'error');
