@@ -58,7 +58,8 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
       result,
       tx_name,
     };
-    if (tx_name === '' || ' ') {
+    console.log(formTxCreate);
+    if (formTxCreate.tx_name === '') {
       return toast({
         title: 'Physiotherapist cannot be null',
         description: 'Please edit physiotherapist name',
@@ -175,11 +176,11 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
         <div className='w-full flex items-start mt-3 md:mt-6 xl:mt-8'>
           <label
             htmlFor='tx'
-            className='text-[0.8rem] font-semibold w-[20%] text-start md:text-[1.2rem]'
+            className='text-[0.8rem] font-semibold w-[20%] text-start md:text-[1.2rem] xl:w-[10%]'
           >
             Treatment
           </label>
-          <div className='w-[80%] flex flex-col'>
+          <div className='w-[80%] flex flex-col xl:w-[90%]'>
             {tx?.map((e, index) => {
               return (
                 <p
@@ -221,27 +222,27 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
         <div className='w-full flex items-start mt-3 md:mt-6 xl:mt-8'>
           <label
             htmlFor='result'
-            className='text-[0.8rem] font-semibold w-[15%] text-start md:text-[1.2rem]'
+            className='text-[0.8rem] font-semibold w-[15%] text-start md:text-[1.2rem] xl:w-[10%]'
           >
             Result
           </label>
           <textarea
             id='result'
             onChange={(e) => setResult(e.target.value)}
-            className='w-[85%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
+            className='w-[85%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem] xl:w-[90%]'
           ></textarea>
         </div>
         <div className='w-full flex items-start mt-3 md:mt-6 xl:mt-8'>
           <label
             htmlFor='tx_name'
-            className='text-[0.8rem]  font-semibold  w-[30%] text-start md:text-[1.2rem]'
+            className='text-[0.8rem]  font-semibold  w-[30%] text-start md:text-[1.2rem] xl:w-[15%]'
           >
             Physiotherapist
           </label>
           <input
             id='tx_name'
             onChange={(e) => setTx_name(e.target.value)}
-            className='w-[40%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem]'
+            className='w-[40%] pl-2 border-[1px] text-[0.8rem] border-gray-500  rounded-md md:text-[1.2rem] '
           ></input>
         </div>
       </section>
