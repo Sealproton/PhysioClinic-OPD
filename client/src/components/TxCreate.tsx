@@ -68,7 +68,6 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
       result,
       tx_name,
     };
-    console.log(formTxCreate);
     if (formTxCreate.tx_name === '') {
       return toast({
         title: 'Physiotherapist cannot be null',
