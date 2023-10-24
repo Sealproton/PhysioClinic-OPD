@@ -37,7 +37,7 @@ const PatientsPage: React.FC = () => {
       const data = await axios.get(
         `${
           import.meta.env.VITE_SERVER_URL
-        }/patients?query=${searchTerm}/${page}`
+        }/patients?query=${searchTerm}?${page}`
       );
       return data.data;
     },
@@ -162,9 +162,11 @@ const PatientsPage: React.FC = () => {
               <h1 className='text-center text-[0.6rem] text-gray-700 font-semibold md:text-[1.2rem]'>
                 {data.age}
               </h1>
-              <h1 className='text-center text-[1.2rem]  font-semibold md:text-[1.8rem] cursor-pointer'>
-                📝
-              </h1>
+              <Link to={`/${data.pt_id * 658243}`}>
+                <h1 className='text-center text-[1.2rem]  font-semibold md:text-[1.8rem] cursor-pointer'>
+                  📝
+                </h1>
+              </Link>
             </div>
           );
         })}

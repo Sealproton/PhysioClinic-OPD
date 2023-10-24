@@ -32,14 +32,15 @@ export class PatientRepository {
     }
   }
   async findAllPatients(userID: number, queryandpage: string) {
-    const [queryParameters, page] = queryandpage.split('/');
+    const [queryParameters, page] = queryandpage.split('?');
+
     const offset = (Number(page) - 1) * 10;
     const queryParams: (number | string)[] = [userID];
     const queryParts = [`SELECT * FROM patients WHERE user_id = $1`];
     if (queryParameters) {
       queryParams.push(queryParameters);
       queryParts.push(
-        'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR UPPER(hn) ~ UPPER($2) OR tel ~ $2)',
+        'AND (UPPER(name) ~ UPPER($2) OR UPPER(lname) ~ UPPER($2) OR hn ~ $2 OR tel ~ $2)',
       );
     }
     queryParts.push(`ORDER BY created_at ASC LIMIT 10 OFFSET ${offset}`);

@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const result = await signIn(username, password);
+      const result = await signIn(username.trim(), password.trim());
       if (result === 400 || result === 404 || result === 401) {
         toast({
           title: 'Incorrect username or password.',
