@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { FcPrevious } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
@@ -10,7 +9,7 @@ import CreateTreatment from '../components/TxCreate';
 import axios from 'axios';
 const SinglePatientPage: React.FC = () => {
   const { id } = useParams();
-  const [ptID, setPtID] = useState<number>(Number(id) / 658243);
+  const ptID = Number(id) / 658243;
   const {
     data: patientData,
     isError: ptErr,
