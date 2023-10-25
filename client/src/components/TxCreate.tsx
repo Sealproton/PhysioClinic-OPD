@@ -95,7 +95,7 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
     <div className='flex flex-col items-start w-full md:w-[80%]'>
       <header className='w-full flex justify-center mt-2 mb-2 '>
         <h1 className='text-[1.2rem] font-semibold xl:text-[2rem]'>
-          Create Treatment
+          Create OPD Card
         </h1>
       </header>
       <section className='w-full flex gap-2 mt-5 md:mt-8'>
@@ -224,7 +224,11 @@ const CreateTreatment: React.FC<TreatmentProp> = ({ pt_id }) => {
               ></input>
               <button
                 onClick={() => {
-                  setTx([...tx, txInput]);
+                  if (!txInput) {
+                    setTx([...tx]);
+                  } else {
+                    setTx([...tx, txInput]);
+                  }
                   setTxInput('');
                 }}
                 className='text-[0.6rem] w-[10%] p-1 rounded-md bg-green-200 h-fit md:text-[0.8rem]'

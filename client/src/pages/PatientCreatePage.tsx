@@ -6,6 +6,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { CircularProgress } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useToast } from '@chakra-ui/react';
 interface CreatePatient {
   HN: string;
   name: string;
@@ -33,6 +34,7 @@ const getHn = (ptData: any) => {
   return `${currentYear}/${getLastedPtNumber + 1}`;
 };
 const CreatePatient: React.FC = () => {
+  const toast = useToast();
   const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [lname, setLname] = useState<string>('');
@@ -100,6 +102,24 @@ const CreatePatient: React.FC = () => {
       smoke: smoke,
       alcohol: alcohol,
     };
+    if (!name || !lname || !tel) {
+      return toast({
+        title: 'You have to fill all required data',
+        description: 'you have to fill name, lastname and phone number',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    if(age === 0 || null){
+      return toast({
+        title: 'Age must not be 0 or empty',
+        description: 'Please check your age data',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
     Swal.fire({
       title: 'Are you sure?',
       text: 'Your patient data will be created!',

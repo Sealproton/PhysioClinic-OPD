@@ -62,10 +62,10 @@ const SinglePatientPage: React.FC = () => {
             Patient
           </Tab>
           <Tab w='40%' fontSize={{ base: '12px', md: '25px', lg: '28px' }}>
-            Create Treatment
+            Create OPD Card
           </Tab>
           <Tab w='40%' fontSize={{ base: '12px', md: '25px', lg: '28px' }}>
-            Treatments History
+            OPD Card History
           </Tab>
         </TabList>
         <TabPanels>
