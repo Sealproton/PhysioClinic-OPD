@@ -53,7 +53,7 @@ const TreatmentPage: React.FC<TreatmentProp> = ({ pt_id }) => {
   return (
     <div className='w-full flex flex-col items-center'>
       <h1 className='text-[1.2rem] font-semibold text-center mb-3 h-[40px] border-b-2 w-full md:text-[1.5rem] xl:text-[2rem] xl:h-[60px]'>
-        Treatments History
+        OPD Cards History
       </h1>
       <div className='mt-2 flex w-full  mb-2 xl:mt-4'>
         <h1 className='text-[0.6rem] font-semibold w-[30%] md:text-[1.2rem]'>
